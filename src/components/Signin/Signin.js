@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoadingSpinner from '../loadingspinner/loadingspinner';
+import LoadingSpinner from '../LoadingSpinner/loadingspinner';
 import ErrorMsg from '../ErrorMessage/errormessage';
 
 class Signin extends Component {
