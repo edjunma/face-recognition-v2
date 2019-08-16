@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LoadingSpinner from '../loadingspinner/loadingspinner';
-import ErrorRegisterMessage from '../errormessage/errorRegisterMessage';
+import LoadingSpinner from '../LoadingSpinner/loadingspinner';
+import ErrorRegisterMessage from '../ErrorMessage/errorRegisterMessage';
 
 class Register extends Component {
 	constructor(props) {

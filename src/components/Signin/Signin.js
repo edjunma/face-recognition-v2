@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoadingSpinner from '../loadingspinner/loadingspinner';
-import ErrorMsg from '../errormessage/errormessage';
+import ErrorMsg from '../ErrorMessage/errormessage';
 
 class Signin extends Component {
 	constructor(props) {

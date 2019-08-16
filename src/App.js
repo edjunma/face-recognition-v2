@@ -7,6 +7,7 @@ import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
+import ErrorImgMessage from './components/ErrorMessage/errorImageMessage';
 import Rank from './components/Rank/Rank';
 import './App.css';
 
@@ -27,24 +28,27 @@ const particlesOptions = {
 	}
 };
 
+const initialState = {
+	input: '',
+	imageUrl: '',
+	box: {},
+	route: 'signin',
+	isSignedIn: false,
+	user: {
+		id: '',
+		name: '',
+		email: '',
+		entries: 0,
+		joined: ''
+	}
+};
+
 class App extends Component {
 	constructor() {
 		super();
-		this.state = {
-			input: '',
-			imageUrl: '',
-			box: {},
-			route: 'signin',
-			isSignedIn: false,
-			user: {
-				id: '',
-				name: '',
-				email: '',
-				entries: 0,
-				joined: ''
-			}
+		this.state = initialState;
 		};
-	}
+	};
 
 	loadUser = data => {
 		this.setState({
@@ -80,31 +84,48 @@ class App extends Component {
 	};
 
 	onButtonSubmit = () => {
-		this.setState({ imageUrl: this.state.input });
-		app.models
-			.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-			.then(response => {
-				if (response) {
-					fetch('http://localhost:3000/image', {
-						method: 'put',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							id: this.state.user.id
-						})
-					})
+		this.setState({imageUrl: this.state.input});
+    if(this.state.input){
+        fetch('https://polar-gorge-81355.herokuapp.com/imgurl', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                input: this.state.input
+            })
+        })
+      .then(response => response.json())
+      .then(response => {
+        if(response.status) {
+          fetch('https://polar-gorge-81355.herokuapp.com/img', { //'https://polar-gorge-81355.herokuapp.com/img'
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: this.state.user.id
+            })
+          })
 						.then(response => response.json())
 						.then(count => {
+							this.setState({displayError: false});
 							this.setState(Object.assign(this.state.user, { entries: count }));
+						})
+						.catch(err => {
+							this.setState({displayError: true});
 						});
+				} else {
+					this.setState({displayError: true});
 				}
+				this.setState({displayError: false});
 				this.displayFaceBox(this.calculateFaceLocation(response));
 			})
-			.catch(err => console.log(err));
-	};
+			.catch(err => this.setState({displayError: true}))
+		} else {
+			this.setState({displayError: true});
+		};
+	}
 
 	onRouteChange = route => {
 		if (route === 'signout') {
-			this.setState({ isSignedIn: false });
+			this.setState(initialState);
 		} else if (route === 'home') {
 			this.setState({ isSignedIn: true });
 		}
@@ -112,29 +133,36 @@ class App extends Component {
 	};
 
 	render() {
-		const { isSignedIn, imageUrl, route, box } = this.state;
-		return (
-			<div className='App'>
-				<Particles className='particles' params={particlesOptions} />
-				<Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
-				{route === 'home' ? (
-					<div>
-						<Logo />
-						<Rank name={this.state.user.name} entries={this.state.user.entries} />
-						<ImageLinkForm
-							onInputChange={this.onInputChange}
-							onButtonSubmit={this.onButtonSubmit}
-						/>
-						<FaceRecognition box={box} imageUrl={imageUrl} />
-					</div>
-				) : route === 'signin' ? (
-					<Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-				) : (
-					<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-				)}
-			</div>
-		);
-	}
+    const { route, isSignedIn, box, imageUrl, displayError } = this.state;
+    return (
+      <div className="App">
+        <Particles className='particles'
+          params={particleOptions}
+        />
+        <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn}/>
+       { route === 'home' 
+          ? <div>
+              <Logo />
+              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
+              <ImageLinkForm 
+              onInputChange={this.onInputChange} 
+              onSubmit={this.onSubmit}
+              />
+                <FaceR box={box} imageUrl={imageUrl}/>
+              { displayError 
+              ? <ErrorImgMessage />
+              : null
+              }
+            </div>
+            : (
+              route === 'signin' || route === 'signout'
+              ? <Signin onRouteChange={this.onRouteChange} loadUser={this.loadUser}/> 
+              : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
+            )
+        }
+      </div>
+    );
+  }
 }
 
 export default App;
