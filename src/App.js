@@ -79,40 +79,37 @@ class App extends Component {
 	onButtonSubmit = () => {
 		this.setState({ imageUrl: this.state.input });
 		fetch('http://localhost:3000/imageurl', {
-					method: 'post',
-					headers: {'Content-Type': 'application/json'},
-					body: JSON.stringify({
-						input: this.state.input
-					})
-				})
-				.then(response => response.json())
-				.then(response => {
-					if(response) {
-						fetch('http://localhost:3000/image', {
-							method: 'put',
-							headers: {'Content-Type': 'application/json'},
-							body: JSON.stringify({
-								id: this.state.user.id
-							})
+			method: 'post',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				input: this.state.input
+			})
+		})
+			.then(response => response.json())
+			.then(response => {
+				if (response) {
+					fetch('http://localhost:3000/image', {
+						method: 'put',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							id: this.state.user.id
 						})
-							.then(response => response.json())
-							.then(count => {
-								this.setState({ displayError: false });
-								this.setState(Object.assign(this.state.user, { entries: count }));
-							})
-							.catch(err => {
-								this.setState({ displayError: true });
-							});
-					} else {
-						this.setState({ displayError: true });
-					}
-					this.setState({ displayError: false });
-					this.displayFaceBox(this.calculateFaceLocation(response));
-				})
-				.catch(err => this.setState({ displayError: true }));
-		} else {
-			this.setState({ displayError: true });
-		}
+					})
+						.then(response => response.json())
+						.then(count => {
+							this.setState({ displayError: false });
+							this.setState(Object.assign(this.state.user, { entries: count }));
+						})
+						.catch(err => {
+							this.setState({ displayError: true });
+						});
+				} else {
+					this.setState({ displayError: true });
+				}
+				this.setState({ displayError: false });
+				this.displayFaceBox(this.calculateFaceLocation(response));
+			})
+			.catch(err => this.setState({ displayError: true }));
 	};
 
 	onRouteChange = route => {
