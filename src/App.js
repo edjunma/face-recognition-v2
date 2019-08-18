@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
@@ -10,11 +9,6 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import ErrorImgMessage from './components/ErrorMessage/errorImageMessage';
 import Rank from './components/Rank/Rank';
 import './App.css';
-
-//You must add your own API key here from Clarifai.
-const app = new Clarifai.App({
-	apiKey: '147046a299a541b4902c4001df6535a2'
-});
 
 const particlesOptions = {
 	particles: {
@@ -84,21 +78,19 @@ class App extends Component {
 
 	onButtonSubmit = () => {
 		this.setState({ imageUrl: this.state.input });
-		if (this.state.input) {
-			fetch('https://polar-gorge-81355.herokuapp.com/imgurl', {
-				method: 'post',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					input: this.state.input
+		fetch('http://localhost:3000/imageurl', {
+					method: 'post',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify({
+						input: this.state.input
+					})
 				})
-			})
 				.then(response => response.json())
 				.then(response => {
-					if (response.status) {
-						fetch('https://polar-gorge-81355.herokuapp.com/img', {
-							//'https://polar-gorge-81355.herokuapp.com/img'
+					if(response) {
+						fetch('http://localhost:3000/image', {
 							method: 'put',
-							headers: { 'Content-Type': 'application/json' },
+							headers: {'Content-Type': 'application/json'},
 							body: JSON.stringify({
 								id: this.state.user.id
 							})
