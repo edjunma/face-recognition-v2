@@ -28,7 +28,7 @@ class Signin extends Component {
 
 	onSubmitSignIn = () => {
 		this.setState({ isLoading: true }, () => {
-			fetch('https://aqueous-crag-33852.herokuapp.com/signin', {
+			fetch('https://polar-gorge-81355.herokuapp.com/signin', {
 				method: 'post',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -115,7 +115,7 @@ class Signin extends Component {
 				</div>
 				<p style={{ fontSize: '1.2rem' }}>
 					For testing purposes, please use test@gmail.com and test as email and password
-					respectively or you can also Register your own account.
+					respectively or you can also Register
 				</p>
 			</div>
 		);
