@@ -35,7 +35,7 @@ class Register extends Component {
 
 	onSubmitSignIn = () => {
 		this.setState({ isLoading: true }, () => {
-			fetch('https://polar-gorge-81355.herokuapp.com/register', {
+			fetch('https://aqueous-crag-33852.herokuapp.com/register', {
 				method: 'post',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
