@@ -18,10 +18,13 @@ const Logo = () => {
 					left: '15px'
 				}}
 			>
-				<div className='Tilt-inner pa3'>
-					<img style={{ paddingTop: '25px' }} alt='logo' src={brain} />
-				</div>
+				<a href='https://github.com/edjunma/face-recognition-v2' alt='logo'>
+					<div className='Tilt-inner pa3'>
+						<img style={{ paddingTop: '25px' }} alt='logo' src={brain} />
+					</div>
+				</a>
 			</Tilt>
+			o
 		</div>
 	);
 };
