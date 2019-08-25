@@ -11,9 +11,7 @@ and PostgreSQL database to record user entries and log accounts.
 - CSS3
 - JavaScript
 - React
-- Node.js
-- Express.js
-- PostgreSQL
+- Redux
 - Heroku
 
 ## Run this project locally
