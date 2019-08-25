@@ -6,7 +6,7 @@ import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import ErrorImgMessage from './components/ErrorMessage/errorImageMessage';
+import ErrorImageMessage from './components/ErrorMessage/errorImageMessage';
 import Rank from './components/Rank/Rank';
 import './App.css';
 
@@ -27,6 +27,7 @@ const initialState = {
 	imageUrl: '',
 	box: {},
 	route: 'signin',
+	displayError: false,
 	isSignedIn: false,
 	user: {
 		id: '',
@@ -126,11 +127,11 @@ class App extends Component {
 	};
 
 	render() {
-		const { isSignedIn, imageUrl, route, box, displayError } = this.state;
+		const { route, isSignedIn, box, imageUrl, displayError } = this.state;
 		return (
 			<div className='App'>
 				<Particles className='particles' params={particlesOptions} />
-				<Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+				<Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
 				{route === 'home' ? (
 					<div>
 						<Logo />
@@ -140,12 +141,12 @@ class App extends Component {
 							onButtonSubmit={this.onButtonSubmit}
 						/>
 						<FaceRecognition box={box} imageUrl={imageUrl} />
-						{displayError ? <ErrorImgMessage /> : null}
+						{displayError ? <ErrorImageMessage /> : null}
 					</div>
 				) : route === 'signin' || route === 'signout' ? (
-					<Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+					<Signin onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
 				) : (
-					<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+					<Register onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
 				)}
 			</div>
 		);
