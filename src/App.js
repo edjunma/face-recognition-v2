@@ -57,15 +57,15 @@ class App extends Component {
 	};
 
 	calculateFaceLocation = data => {
-		const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+		const faceBox = data.outputs[0].data.regions[0].region_info.bounding_box;
 		const image = document.getElementById('inputimage');
 		const width = Number(image.width);
 		const height = Number(image.height);
 		return {
-			leftCol: clarifaiFace.left_col * width,
-			topRow: clarifaiFace.top_row * height,
-			rightCol: width - clarifaiFace.right_col * width,
-			bottomRow: height - clarifaiFace.bottom_row * height
+			leftCol: faceBox.left_col * width,
+			topRow: faceBox.top_row * height,
+			rightCol: width - faceBox.right_col * width,
+			btmRow: height - faceBox.bottom_row * height
 		};
 	};
 
@@ -77,7 +77,7 @@ class App extends Component {
 		this.setState({ input: event.target.value });
 	};
 
-	onButtonSubmit = () => {
+	onSubmit = () => {
 		this.setState({ imageUrl: this.state.input });
 		if (this.state.input) {
 			fetch('https://aqueous-crag-33852.herokuapp.com/imageurl', {
@@ -136,10 +136,7 @@ class App extends Component {
 					<div>
 						<Logo />
 						<Rank name={this.state.user.name} entries={this.state.user.entries} />
-						<ImageLinkForm
-							onInputChange={this.onInputChange}
-							onButtonSubmit={this.onButtonSubmit}
-						/>
+						<ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
 						<FaceRecognition box={box} imageUrl={imageUrl} />
 						{displayError ? <ErrorImageMessage /> : null}
 					</div>

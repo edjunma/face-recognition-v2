@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ErrorRegisterMessage = () => (
+const errorRegisterMessage = () => (
 	<div style={{ fontSize: '1rem', fontWeight: 'bold', color: 'red' }}>
-		<p>Name, Email, and Password are required!</p>
+		<p>Name, Email, and Password fields are required!</p>
 	</div>
 );
 
-export default ErrorRegisterMessage;
+export default errorRegisterMessage;
