@@ -78,38 +78,42 @@ class App extends Component {
 
 	onButtonSubmit = () => {
 		this.setState({ imageUrl: this.state.input });
-		fetch('https://aqueous-crag-33852.herokuapp.com/imageurl', {
-			method: 'post',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				input: this.state.input
+		if (this.state.input) {
+			fetch('https://aqueous-crag-33852.herokuapp.com/imageurl', {
+				method: 'post',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					input: this.state.input
+				})
 			})
-		})
-			.then(response => response.json())
-			.then(response => {
-				if (response) {
-					fetch('https://aqueous-crag-33852.herokuapp.com/image', {
-						method: 'put',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							id: this.state.user.id
+				.then(response => response.json())
+				.then(response => {
+					if (response.status) {
+						fetch('https://aqueous-crag-33852.herokuapp.com/image', {
+							method: 'put',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								id: this.state.user.id
+							})
 						})
-					})
-						.then(response => response.json())
-						.then(count => {
-							this.setState({ displayError: false });
-							this.setState(Object.assign(this.state.user, { entries: count }));
-						})
-						.catch(err => {
-							this.setState({ displayError: true });
-						});
-				} else {
-					this.setState({ displayError: true });
-				}
-				this.setState({ displayError: false });
-				this.displayFaceBox(this.calculateFaceLocation(response));
-			})
-			.catch(err => this.setState({ displayError: true }));
+							.then(response => response.json())
+							.then(count => {
+								this.setState({ displayError: false });
+								this.setState(Object.assign(this.state.user, { entries: count }));
+							})
+							.catch(err => {
+								this.setState({ displayError: true });
+							});
+					} else {
+						this.setState({ displayError: true });
+					}
+					this.setState({ displayError: false });
+					this.displayFaceBox(this.calculateFaceLocation(response));
+				})
+				.catch(err => this.setState({ displayError: true }));
+		} else {
+			this.setState({ displayError: true });
+		}
 	};
 
 	onRouteChange = route => {
