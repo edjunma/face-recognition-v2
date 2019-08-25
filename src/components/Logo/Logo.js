@@ -24,7 +24,6 @@ const Logo = () => {
 					</div>
 				</a>
 			</Tilt>
-			o
 		</div>
 	);
 };
